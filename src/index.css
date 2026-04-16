@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  --color-mint: #2ECC71;
+  --color-soft-white: #F0F4F8;
+  --color-navy: #1A2A6C;
+  --color-pastel-blue: #A2C2E1;
+  
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer utilities {
+  .neu-flat {
+    background: var(--color-soft-white);
+    box-shadow: 8px 8px 16px #cdd1d5, -8px -8px 16px #ffffff;
+  }
+  .neu-pressed {
+    background: var(--color-soft-white);
+    box-shadow: inset 8px 8px 16px #cdd1d5, inset -8px -8px 16px #ffffff;
+  }
+  .neu-convex {
+    background: linear-gradient(145deg, #ffffff, #d8dce0);
+    box-shadow: 8px 8px 16px #cdd1d5, -8px -8px 16px #ffffff;
+  }
+  .neu-concave {
+    background: linear-gradient(145deg, #d8dce0, #ffffff);
+    box-shadow: 8px 8px 16px #cdd1d5, -8px -8px 16px #ffffff;
+  }
+  .glass-panel {
+    background: rgba(240, 244, 248, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  }
+  .glass-panel-dark {
+    background: rgba(26, 42, 108, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  }
+}
+
+body {
+  background-color: var(--color-soft-white);
+  color: var(--color-navy);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Ambient Background Blobs */
+.ambient-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: -1;
+  opacity: 0.6;
+  animation: float 10s infinite ease-in-out alternate;
+}
+
+.blob-1 {
+  top: -10%;
+  left: -10%;
+  width: 40vw;
+  height: 40vw;
+  background: var(--color-mint);
+  animation-delay: 0s;
+}
+
+.blob-2 {
+  bottom: -10%;
+  right: -10%;
+  width: 50vw;
+  height: 50vw;
+  background: var(--color-pastel-blue);
+  animation-delay: -5s;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(5%, 5%) scale(1.1);
+  }
+}

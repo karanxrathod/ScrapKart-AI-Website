@@ -1,0 +1,56 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of ScrapKart AI",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "description": "User email address" },
+        "displayName": { "type": "string", "description": "User display name" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "Donation": {
+      "title": "Donation",
+      "description": "A donation made by a user",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "ID of the user making the donation" },
+        "category": { "type": "string", "enum": ["Clothes", "Books", "E-Waste", "Furniture"] },
+        "details": { "type": "string", "description": "Details about the donation" },
+        "status": { "type": "string", "enum": ["Pending", "Completed"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "category", "details", "status", "createdAt"]
+    },
+    "Pickup": {
+      "title": "Pickup",
+      "description": "A scheduled pickup for scrap",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "ID of the user scheduling the pickup" },
+        "address": { "type": "string", "description": "Pickup address" },
+        "scheduledTime": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["Scheduled", "Completed", "Cancelled"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "address", "scheduledTime", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles"
+    },
+    "/donations/{donationId}": {
+      "schema": { "$ref": "#/entities/Donation" },
+      "description": "User donations"
+    },
+    "/pickups/{pickupId}": {
+      "schema": { "$ref": "#/entities/Pickup" },
+      "description": "Scheduled pickups"
+    }
+  }
+}
