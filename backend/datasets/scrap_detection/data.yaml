@@ -1,0 +1,25 @@
+# ScrapKart AI YOLO dataset configuration
+#
+# Expected directory layout:
+# backend/datasets/scrap_detection/
+#   data.yaml
+#   images/
+#     train/
+#     val/
+#   labels/
+#     train/
+#     val/
+#
+# Each label file should follow standard YOLO format:
+# class_id x_center y_center width height
+# with normalized coordinates in the range [0, 1].
+
+path: backend/datasets/scrap_detection
+train: images/train
+val: images/val
+
+names:
+  0: Plastic
+  1: Metal
+  2: E-Waste
+  3: Paper

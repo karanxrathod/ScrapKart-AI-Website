@@ -6,10 +6,9 @@ import { useAuth } from '../AuthContext';
 import { db } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { Calendar, Clock, MapPin, CheckCircle, Search, Loader2 } from 'lucide-react';
-import { GoogleGenAI } from '@google/genai';
 import { useNavigate } from 'react-router-dom';
 
-const aiRef: { current: any } = { current: null };
+const LOCAL_API_BASE = import.meta.env.VITE_LOCAL_API_BASE || 'http://127.0.0.1:8000';
 
 // Fix Leaflet icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -44,16 +43,6 @@ export default function Booking() {
   
   const [isSearchingCenters, setIsSearchingCenters] = useState(false);
   const [nearbyCenters, setNearbyCenters] = useState<string>('');
-
-  useEffect(() => {
-    if (!aiRef.current && import.meta.env.VITE_GEMINI_API_KEY) {
-      try {
-        aiRef.current = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
-      } catch (error) {
-        console.warn("AI initialization warning:", error);
-      }
-    }
-  }, []);
 
   // Default to a central location (e.g., San Francisco)
   const defaultCenter: L.LatLngExpression = [37.7749, -122.4194];
@@ -91,14 +80,25 @@ export default function Booking() {
     setIsSearchingCenters(true);
     setNearbyCenters('');
     try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: `Find recycling centers or scrap yards near this address: ${address}. Provide a short list of 2-3 places with their names and approximate distance or location.`,
-        config: {
-          tools: [{ googleMaps: {} }]
-        }
+      const response = await fetch(`${LOCAL_API_BASE}/api/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: `Suggest 2-3 recycling centers or scrap yards near this address: ${address}. Include names and approximate location notes.`,
+          history: [],
+          pickup_history: [],
+          donation_history: [],
+        })
       });
-      setNearbyCenters(response.text || "No centers found nearby.");
+      
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.detail || `Local backend error: ${response.status}`);
+      }
+
+      setNearbyCenters(data.response || "No centers found nearby.");
     } catch (error) {
       console.error("Error finding centers:", error);
       setNearbyCenters("Failed to find nearby centers. Please try again.");
