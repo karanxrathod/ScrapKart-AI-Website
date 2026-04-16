@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
+  "name": "ScrapKart AI",
+  "description": "AI-powered scrap scanning, live pricing, pickup scheduling, and collector tracking.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }
